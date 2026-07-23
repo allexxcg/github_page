@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 拓思 — 用 AI 拓印你心裡的想法</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600;900&family=Noto+Sans+TC:wght@300;400;500&family=DM+Serif+Display:ital@0;1&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1208;
+    --paper: #f2f2f0;
+    --warm: #e6e6e2;
+    --accent: #c4692a;
+    --accent-light: #e8936a;
+    --muted: #7a6e60;
+    --rule: #d0cfc8;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--paper);
+    padding: 182px 0 145px;
+  }
+
+  .hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 80px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .hero-title {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 900;
+    font-size: clamp(40px, 5.5vw, 76px);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 48px;
+  }
+
+  .hero-subtitle {
+    font-size: 22px;
+    line-height: 1.9;
+    color: #4a4236;
+    max-width: 720px;
+    margin-bottom: 64px;
+    font-weight: 300;
+  }
+
+  .hero-subtitle strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    margin-bottom: 64px;
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 24px 54px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--accent); }
+
+  /* Trust bar — no border, bg handled by next section */
+  .hero-trust {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+
+  .trust-item {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    font-weight: 350;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .trust-item::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 80px 0;
+  }
+
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 80px;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 900;
+    font-size: clamp(32px, 3.5vw, 52px);
+    line-height: 1.25;
+    margin-bottom: 20px;
+  }
+
+  .section-subtitle {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 1100px;
+    margin-bottom: 40px;
+    line-height: 1.9;
+  }
+
+  /* ── PROBLEM ── */
+
+  .problem-body p {
+    font-size: 17px;
+    line-height: 1.95;
+    color: #4a4236;
+    margin-bottom: 24px;
+  }
+
+  .problem-body p:last-child { margin-bottom: 0; }
+
+  .problem-body strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+
+  /* Problem text emphasis */
+  .problem-body .key { color: var(--accent); font-weight: 500; }
+  .problem-body .bold { color: var(--ink); font-weight: 500; }
+
+  /* ── ALLEXX ── */
+  .allexx-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .allexx-avatar {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    object-position: center top;
+    filter: grayscale(100%);
+  }
+
+  .allexx-body p {
+    font-size: 16px;
+    line-height: 1.95;
+    color: #4a4236;
+    margin-bottom: 20px;
+  }
+
+  .allexx-body p:last-child { margin-bottom: 0; }
+
+  .allexx-body strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ── FAQ ── */
+  .faq-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 900px;
+  }
+
+  .faq-item {
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .faq-item:hover {
+    border-color: var(--accent);
+  }
+
+  .faq-question {
+    width: 100%;
+    padding: 12px 32px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+    text-align: left;
+    line-height: 1.5;
+    transition: all 0.2s;
+  }
+
+  .faq-question:hover {
+    color: var(--accent);
+  }
+
+  .faq-q-text {
+    flex: 1;
+  }
+
+  .faq-toggle {
+    flex-shrink: 0;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--accent);
+    transition: transform 0.3s ease;
+    display: inline-block;
+  }
+
+  .faq-item.active .faq-toggle {
+    transform: rotate(45deg);
+  }
+
+  .faq-answer {
+    max-height: 0;
+    /*max-height: 600px;*/
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+    background: transparent;
+  }
+
+  .faq-item.active .faq-answer {
+    max-height: 600px;
+    overflow-y: auto;
+  }
+
+  .faq-answer-inner {
+    padding: 0px 32px 12px;
+    font-size: 16px;
+    line-height: 1.95;
+    color: #4a4236;
+  }
+
+  .faq-answer-inner p {
+    margin-bottom: 16px;
+  }
+
+  .faq-answer-inner p:last-child {
+    margin-bottom: 0;
+  }
+
+  .faq-answer-inner strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .allexx-name {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .allexx-title {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 300;
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .alt-bg { background: var(--warm); }
+
+  .steps {
+    display: block;
+  }
+
+  .steps-left { margin-bottom: 40px; }
+
+  .steps-right { display: flex; flex-direction: column; }
+
+  .step-item {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 24px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .step-item:last-child { border-bottom: none; }
+  .step-item { transition: background 0.2s; cursor: default; }
+  .step-item:hover .step-title { color: var(--accent); }
+  .step-item:hover .step-num { color: var(--ink); }
+
+  .step-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 24px;
+    color: var(--accent);
+  }
+
+  .step-title {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 600;
+    font-size: 20px;
+    padding-top: 4px;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+
+  .step-desc {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  /* Demo */
+  .demo-stage:hover { background: var(--warm) !important; }
+  .demo-wrap {
+    margin-top: 80px;
+    padding-top: 80px;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .demo-card {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 40px;
+    box-shadow: 6px 6px 0 var(--rule);
+  }
+
+  .card-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .card-input {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--muted);
+    border-left: 2px solid var(--rule);
+    padding-left: 16px;
+    margin-bottom: 12px;
+  }
+
+  .card-arrow {
+    text-align: center;
+    color: var(--accent);
+    font-size: 20px;
+    margin-bottom: 12px;
+    opacity: 0.6;
+  }
+
+  .card-output-wrap {
+    position: relative;
+    overflow: hidden;
+    max-height: 280px;
+  }
+
+  .card-output-wrap::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 180px;
+    background: linear-gradient(to bottom, rgba(242,242,240,0) 0%, rgba(242,242,240,0.97) 100%);
+    pointer-events: none;
+  }
+
+  .card-output {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--ink);
+  }
+
+  /* ── MODULES ── */
+  .modules-grid {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--rule);
+    overflow: hidden;
+  }
+
+  .module-item {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: start;
+    padding: 36px 40px;
+    border-bottom: 1px solid var(--rule);
+    transition: background 0.2s;
+  }
+
+  .module-item:last-child { border-bottom: none; }
+  .module-item:hover { background: var(--warm); }
+  .module-item:hover .module-name { color: var(--accent); }
+
+  .module-meta { padding-top: 4px; }
+
+  .module-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 10px;
+  }
+
+  .module-name {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 900;
+    font-size: 22px;
+    line-height: 1.3;
+    color: var(--ink);
+    transition: color 0.2s;
+  }
+
+  .module-desc {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+
+  /* ── CLARITY ── */
+  .clarity-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    overflow: hidden;
+  }
+
+  .clarity-col { background: var(--paper); padding: 48px 40px; }
+  .clarity-col.dark { background: var(--ink); color: var(--paper); }
+
+  .clarity-col-title {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 600;
+    font-size: 19px;
+    margin-bottom: 32px;
+    color: var(--muted);
+  }
+
+  .clarity-col.dark .clarity-col-title { color: rgba(255,255,255,0.55); }
+
+  .clarity-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .clarity-list li {
+    font-size: 16px;
+    line-height: 1.7;
+    display: flex;
+    gap: 12px;
+  }
+
+  .clarity-list li::before {
+    content: '×';
+    color: #c0987a;
+    font-family: 'DM Serif Display', serif;
+    font-size: 19px;
+    flex-shrink: 0;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+
+  .clarity-col.dark .clarity-list li::before {
+    content: '✓';
+    color: var(--accent-light);
+  }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 80px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '拓';
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 900;
+    font-size: 500px;
+    color: rgba(255,255,255,0.025);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .cta-inner { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 80px; text-align: center; }
+
+  .cta-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--accent-light);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .cta-title {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 900;
+    font-size: clamp(36px, 4vw, 60px);
+    line-height: 1.3;
+    margin-bottom: 24px;
+  }
+
+  .cta-subtitle {
+    font-size: 16px;
+    color: rgba(245,240,232,0.6);
+    max-width: 480px;
+    margin: 0 auto 40px;
+    line-height: 1.8;
+  }
+
+  .btn-cta-main {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 20px 56px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-cta-main:hover { background: var(--accent-light); transform: translateY(-2px); }
+
+  .cta-note {
+    margin-top: 20px;
+    font-size: 12px;
+    color: rgba(245,240,232,0.35);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 12px 80px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0px;
+  }
+
+  .footer-logo {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 900;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+  }
+
+  .footer-copy {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── FADE ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    .hero-inner, .section-inner, .cta-inner { padding-left: 24px !important; padding-right: 24px !important; }
+    .problems { grid-template-columns: 1fr; }
+    .modules-grid { grid-template-columns: 1fr 1fr; }
+    .module-item { border-right: none; border-bottom: 1px solid var(--rule); }
+    .steps, .demo-wrap { grid-template-columns: 1fr; }
+    .steps-left { position: static; }
+    .clarity-grid { grid-template-columns: 1fr; }
+    footer { padding: 32px 24px; flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">AI Imprint Writing · Lite Course</div>
+    <h1 class="hero-title">半天之內，用 AI<br>把想法變成迫不及待<br>發布的文字</h1>
+    <p class="hero-subtitle">
+      透過「AI 拓思」寫作系統，用 AI 寫出讓自己滿意的文字、打造加速創作的工作流程，<strong>獲得穩定輸出和深耕品牌信任的數位寫作力</strong>。
+    </p>
+    <div class="hero-actions">
+      <a href="https://portaly.cc/allexx/product/sWIkzz4nrXl7Zieb5bQg" class="btn-primary">立即購買 AI 拓思</a>
+    </div>
+    <div class="hero-trust">
+      <div class="trust-item">5個核心模組</div>
+      <div class="trust-item">3套即用提詞</div>
+      <div class="trust-item">可重複運用的創作流程</div>
+      <div class="trust-item">一篇與AI共創的文字內容</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="section alt-bg">
+  <div class="section-inner">
+    <div class="section-label fade-up">The Problem</div>
+    <h2 class="section-title fade-up">你有話想說，卻總是<br>卡在動筆的那一刻。</h2>
+
+    <div class="problem-body fade-up">
+      <p>你知道內容對自己的事業有多重要。</p>
+      <p>你知道<span class="bold">持續發布高品質文字，是建立受眾、累積信任、讓對的人找到你的關鍵</span>。</p>
+      <p>穩定的內容創作是你事業成長的核心，你非常清楚。</p>
+      <p><span class="key">問題不在認知面，在執行面。</span></p>
+      <p>每次你打開寫作軟體，準備將想法、心得、自己認為更好的觀點寫出來分享時——你就是不知道該怎麼開始才好。</p>
+      <p>然後過了 25 分鐘，你盯著的還是<span class="bold">什麼字都沒有的空白螢幕</span>。</p>
+      <p>明明你有筆記、素材和幾點想法。</p>
+      <p>你告訴自己先列個大綱，讓自己有個方向。</p>
+      <p>但看著眼前零碎的筆記，只能隱約感覺出模糊的輪廓，卻一直<span class="bold">拼不出清晰的藍圖細節</span>。</p>
+      <p>好不容易有了架構，準備開始填細節時，你就是沒辦法一句接著一句，順暢地寫下去。</p>
+      <p>最後，你沒能完成內容，什麼都沒發布出去。</p>
+      <p><span class="key">代價很具體：你的品牌沒讓對的人看見、你的受眾沒有累積更多信任、你的事業少掉最重要的成長燃料。</span></p>
+      <p>「AI 拓思」解決的，是這個執行缺口。</p>
+      <p>它不替你產生靈感，也不為你全自動產稿——只要你有個粗略的想法，AI 拓思能幫你把骨架立起來，讓你在一個有結構、有草稿的起點創作和前進，<span class="bold">再也不必從零開始</span>。</p>
+    </div>
+  </div>
+</section>
+
+<!-- CLARITY -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label fade-up">Who This Is For</div>
+    <h2 class="section-title fade-up">AI 拓思，<br>這套技術適合誰。</h2>
+    <div class="clarity-grid fade-up" style="margin-top:48px;">
+      <div class="clarity-col">
+        <div class="clarity-col-title">不適合你，如果你是…</div>
+        <ul class="clarity-list">
+          <li>想要 AI 全自動生成內容、自己完全不用動腦的人</li>
+          <li>不在乎內容有沒有靈魂，只想要衝高流量、追求爆文公式的人</li>
+          <li>自己沒觀點、沒感受，卻要求 AI 寫得有血有肉的人</li>
+          <li>想獲得「複製貼上就能用」的萬能提詞模版</li>
+        </ul>
+      </div>
+      <div class="clarity-col dark">
+        <div class="clarity-col-title">很適合你，如果你是…</div>
+        <ul class="clarity-list">
+          <li>想用文字建立一人事業，但每次一動筆就卡住的人</li>
+          <li>嘗試過使用 AI 寫作，但無法穩定得到讓自己感到滿意成品的人</li>
+          <li>擁有許多想法與觀點，想用 AI 提高內容產能的人</li>
+          <li>想建立一個可重複使用的寫作工作流程</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section alt-bg" id="how">
+  <div class="section-inner">
+    <div class="steps">
+      <div class="steps-left fade-up">
+        <div class="section-label">How It Works</div>
+        <h2 class="section-title">用 AI，幫助自己<br>拓思、架構、啟動寫作。</h2>
+        <p class="section-subtitle fade-up">
+          你只需要一個 Claude 帳號、一個有點感受的想法、半個工作日的創作時間
+        </p>
+      </div>
+      <div class="steps-right">
+        <div class="step-item fade-up">
+          <div class="step-num">01</div>
+          <div>
+            <div class="step-title">拓印你的想法</div>
+            <div class="step-desc">AI 透過一來一往的訪問，把你腦袋裡的素材和觀點逐步挖出來。</div>
+          </div>
+        </div>
+        <div class="step-item fade-up">
+          <div class="step-num">02</div>
+          <div>
+            <div class="step-title">選擇你的切入角度</div>
+            <div class="step-desc">AI 提出三個不同視角，你選那個真正想說的方向。</div>
+          </div>
+        </div>
+        <div class="step-item fade-up">
+          <div class="step-num">03</div>
+          <div>
+            <div class="step-title">在 Artifact 裡修改大綱</div>
+            <div class="step-desc">AI 在 Artifact 介面生成大綱，讓你在裡面直接修改結構與細節。</div>
+          </div>
+        </div>
+        <div class="step-item fade-up">
+          <div class="step-num">04</div>
+          <div>
+            <div class="step-title">逐段產出草稿</div>
+            <div class="step-desc">AI 一次只產出一段文字，你修好後再繼續，全程掌控方向和語氣。</div>
+          </div>
+        </div>
+        <div class="step-item fade-up">
+          <div class="step-num">05</div>
+          <div>
+            <div class="step-title">拿到你的第一版文字</div>
+            <div class="step-desc">你得到約 1,000 字、用你的觀點、你的話述說的完整內容。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fade-up" style="margin-top:64px; padding-top:64px; border-top:1px solid var(--rule);">
+      <div class="section-label">Before / After</div>
+      <h3 style="font-family:'Noto Serif TC',serif;font-weight:900;font-size:28px;line-height:1.35;margin-bottom:12px;">從一兩句隨記，到高品質內容</h3>
+      <p class="section-subtitle fade-up">用 AI 將零散想法逐漸具體化，以下從「我遮住跑步機螢幕」幾句記錄開始的範例：</p>
+
+      <div style="border:1px solid var(--rule);overflow:hidden;">
+
+        <!-- Raw Input -->
+        <div class="demo-stage" style="padding:32px;border-bottom:1px solid var(--rule);background:var(--paper);transition:background 0.2s;">
+          <div class="card-label" style="margin-bottom:12px;">隨記（Raw Input）</div>
+          <p style="font-family:'Noto Serif TC',serif;font-size:15px;line-height:1.9;color:var(--muted);border-left:2px solid var(--accent);padding-left:16px;">今天跑跑步機時，覺得不想一直看到數字跳動，用板子遮住，我很喜歡，注意力更能集中在自己的步伐、呼吸、協調感。</p>
+        </div>
+
+        <!-- Outline -->
+        <div class="demo-stage" style="padding:32px;border-bottom:1px solid var(--rule);background:var(--paper);transition:background 0.2s;position:relative;overflow:hidden;max-height:700px;">
+          <div class="card-label" style="margin-bottom:12px;">大綱（Outline）</div>
+          <div style="font-family:'Noto Serif TC',serif;font-size:15px;line-height:1.9;color:var(--ink);">
+            <p style="margin-bottom:10px;color:var(--muted);font-size:13px;letter-spacing:0.05em;font-weight:800;">Section 1 : 跑步機上的紙板實驗</p>
+            <p style="margin-bottom:16px;padding-left:16px;border-left:1px solid var(--rule);color:#4a4236;">段落目的：透過跑步機的真實經驗，帶入「即時雜訊」對感官的干擾。
+              <br>草擬段落：
+              <br>今天在跑步機上，我做了件沒做過的事。機台上的里程、時速、卡路里數字不停跳動，那種視覺上的「進度感」讓我感到莫名的煩躁與焦慮。我找了一塊破紙板，把所有的數據顯示屏全部遮住。數字消失的瞬間，那股焦慮感也跟著消失了。當我不再盯著數字看，更多注意力回到自己的身體。我開始能清晰地感受到呼吸的深淺、腳掌著地的聲音，以及肌肉協調的細微變化，我跑得更有感了。這種彷彿為自己打開飛航模式的斷網感，感覺真好。當下我意識到，原來自己並不需要知道那些即時的數字跳動，我要的只是好好跑步。</p>
+            <p style="margin-bottom:10px;color:var(--muted);font-size:13px;letter-spacing:0.05em;font-weight:800;">Section 2 : 有用的雜訊無所不在</p>
+            <p style="margin-bottom:16px;padding-left:16px;border-left:1px solid var(--rule);color:#4a4236;">
+              段落目的：進一步說明即使是「正確且有用」的資訊，如果對你的行為沒有實質幫助，就是剝奪認知資源的雜訊。<br>
+              草擬段落：<br>
+              這種「有用雜訊」的無所不在，源於我們對不確定性的本能排斥。我們誤以為即時監控等於掌握進度，以為收集越多分析就能更加「On Track」。然而，很多時候，沒有那些數據反而更好，你能收回更多注意力，專注在真正該專注的活動上。最典型的日常例子就是你在執行一項工作時，卻時不時會查看 Gmail 有沒有新的未讀郵件。你以為是在掌握最新情況，但真正重要的事情，對方絕不會是用 email 的方式通知你。換句話說，查看未讀郵件只是讓你分心的事，新的未讀郵件這個資訊，只是「有用的雜訊」。
+            </p>
+            <p style="margin-bottom:10px;color:var(--muted);font-size:13px;letter-spacing:0.05em;font-weight:800;">Section 3 : 建立你的「數位紙板」——區分必要資訊與有用雜訊</p>
+            <p style="margin-bottom:16px;padding-left:16px;border-left:1px solid var(--rule);color:#4a4236;">
+              段落目的：提供具體的判斷準則與行動指南，幫助讀者重新聚焦。<br>
+              草擬段落： 要找回執行力，你必須學會區分什麼是「必要資訊」，什麼是「有用雜訊」。必要資訊是指「對你的工作或活動有影響」的東西；而有用的雜訊則是「雖然正確、雖然有關，但對當下動作並無實質影響」的資訊。以我在進行 Zone 2 的跑步為例，「必要資訊」是我的心率是否在 Zone 2 區間，這決定我接下來要更放鬆或者更用力的跑，來持續維持心率在區間裡；而機台上的「卡路里」或「已跑里程」就是典型的「有用雜訊」。它們在跑完後的數據回顧中很有價值，但在我跑步的當下，知道這些數字並不會改變我的活動，只是雜訊而已。
+            </p>
+          </div>
+          <div style="position:absolute;left:0;right:0;bottom:0;height:280px;background:linear-gradient(to bottom,rgba(242,242,240,0),rgba(242,242,240,0.97));pointer-events:none;"></div>
+        </div>
+
+        <!-- Draft -->
+        <div class="demo-stage" style="padding:32px;background:var(--paper);transition:background 0.2s;position:relative;overflow:hidden;max-height:720px;">
+          <div class="card-label" style="margin-bottom:12px;">文稿（Draft）</div>
+          <div style="font-family:'Noto Serif TC',serif;font-size:15px;line-height:1.95;color:var(--ink);">
+            <p style="margin-bottom:14px;">最近，我在跑步機上做了件沒做過的事。</p>
+            <p style="margin-bottom:14px;">儀表板上的公里數、時速、卡路里，這些一直跳動的數據讓我越看越躁，於是拿了個紙板把它們全擋起來，盲跑。</p>
+            <p style="margin-bottom:14px;">當我用紙板蓋住那些數據，焦躁感神奇地跟著一併消散，更多注意力回到身上，我能更清晰地掌握呼吸的深淺、步伐的大小和核心帶動四肢的協調。</p>
+            <p style="margin-bottom:14px;">以前從沒這種體驗，像是給自己開啟飛航模式，有種斷網後帶來的清爽感。</p>
+            <p style="margin-bottom:14px;">原來我根本不需要時刻知道那些數字，它們只是干擾心流的「有用雜訊」。</p>
+            <h2>有用的雜訊無所不在</h2>
+            <p style="margin-bottom:14px;">跑步機給我的與其說是資訊，更多是一種即時監控的掌握感，彷彿我越是即時知道那些數據的動態，就越能確保自己在軌道上。</p>
+            <p style="margin-bottom:14px;">但當那些數字變化不會影響你接下來的行動時，它們就只是有用但不必要的雜訊。</p>
+            <p style="margin-bottom:14px;">沒有它們，反而更好。</p>
+            <p style="margin-bottom:14px;">而這種雜訊無所不在，舉個典型的例子——Email。不少人在執行一項工作時，會習慣點開新收到的 Email。他以為自己在掌握最新情況，但實際上那封新來的 Email 幾乎不會更動他正在做的事。</p>
+            <p style="margin-bottom:14px;">它有用，但對於手上的任務來說沒必要。頻繁查看新 Email 只是讓雜訊抽走你的認知頻寬，把你從深度工作的狀態中抽離。</p>
+            <p style="margin-bottom:14px;">這種掛著「正確」與「優化」名義的雜訊，往往比真正的垃圾資訊更難防，因為它讓你覺得關注那些資訊是在做對的事。</p>
+            <h2>舉起「數位紙板」</h2>
+            <p style="margin-bottom:14px;">阻斷這類不必要的資訊，關鍵在於區分「必要資訊」和「有用雜訊」。</p>
+          </div>
+          <div style="position:absolute;left:0;right:0;bottom:0;height:280px;background:linear-gradient(to bottom,rgba(242,242,240,0),rgba(242,242,240,0.97));pointer-events:none;"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULES -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label fade-up">What You'll Learn</div>
+    <h2 class="section-title fade-up">5 個模組，<br>帶你從理解到上手。</h2>
+    <p class="section-subtitle fade-up">一套可重複使用的 AI 寫作系統、一篇與 AI 共同完成的文字內容</p>
+    <div class="modules-grid fade-up">
+      <div class="module-item">
+        <div class="module-meta">
+          <div class="module-num">M — 00</div>
+          <div class="module-name">移除卡點</div>
+        </div>
+        <div class="module-desc">你的寫作卡點到底是什麼？本模組從根本重新解構「寫不出來」的瓶頸。你會清楚理解，為什麼每次創作時都感到困難，而「AI 拓思」將如何幫助你移除這些關卡。</div>
+      </div>
+      <div class="module-item">
+        <div class="module-meta">
+          <div class="module-num">M — 01</div>
+          <div class="module-name">重新認知</div>
+        </div>
+        <div class="module-desc">多數人被灌輸 AI 寫作需要先訓練 AI 學會你的寫作風格、學會操作爆文結構。本模組告訴你為何「AI 拓思」不需要這些繁瑣的前置工作，照樣能產生出無可取代的獨特內容。</div>
+      </div>
+      <div class="module-item">
+        <div class="module-meta">
+          <div class="module-num">M — 02</div>
+          <div class="module-name">核心方法</div>
+        </div>
+        <div class="module-desc">完整介紹「AI 拓思」寫作系統：三階段流程（思維拓印 → 大綱建構 → 內容撰寫）、九項簡要操作步驟，以及提升 AI 表現的關鍵技巧與使用認知。</div>
+      </div>
+      <div class="module-item">
+        <div class="module-meta">
+          <div class="module-num">M — 03</div>
+          <div class="module-name">實戰示範</div>
+        </div>
+        <div class="module-desc">本模組帶你走過一遍真實的操作案例。你會看到一個人怎麼從簡短一句話的想法開始，透過「AI 拓思」一步步寫出結構清楚、屬於自己觀點的 1,000 字文稿。</div>
+      </div>
+      <div class="module-item">
+        <div class="module-meta">
+          <div class="module-num">M — 04</div>
+          <div class="module-name">你的第一次</div>
+        </div>
+        <div class="module-desc">透過一個明確的練習任務，搭配一份自我檢查清單，讓你開始實際操作「AI 拓思」系統，並在每個階段都知道「現在做對了嗎」，完成第一篇使用 AI 寫作的文字內容。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- WHO IS ALLEXX -->
+<section class="section alt-bg">
+  <div class="section-inner">
+    <div class="section-label fade-up">Who Is Allexx</div>
+    <div class="allexx-grid fade-up">
+      <div>
+        <img src="allexx-avatar.png" alt="Allexx Zhang" class="allexx-avatar">
+        <div style="margin-top:20px;">
+          <div class="allexx-name">Allexx Zhang</div>
+          <div class="allexx-title">數位寫作者<br>一人事業者</div>
+        </div>
+      </div>
+      <div class="allexx-body">
+        <h3 style="font-family:'Noto Serif TC',serif;font-weight:900;font-size:28px;line-height:1.35;margin-bottom:12px;">嘿，我是 Allexx</h3>        
+        <p>我的一人事業起步，是個再平凡不過的過程。我做過遠距電話銷售、經營 YouTube 頻道、在方格子寫股票分析網誌。</p>
+        <p>最後全都選擇停擺，走上以 Allexx 為個人品牌、經營「自・進化」電子報的一人事業。在不斷碰撞、摸索的過程中，我深深體會到一件事：</p>
+        <p><strong>寫作是所有內容與溝通的起點。</strong></p>
+        <p>電話銷售的話本是寫作，YouTube 的腳本是寫作，網誌、脆文、產品文案、電子報、甚至 IG Reels 的原型，全都是寫作。如何有效溝通你的價值，與你擁有什麼價值同等重要；而現代媒體向觀眾溝通價值的底層核心，是寫作。</p>
+        <p>但我知道，寫作並不是件容易的事。</p>
+        <p>AI 拓思，是我為自己設計的解法，是我現在每次寫作時都會運用的數位槓桿。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label fade-up">Frequently Asked Questions</div>
+    <h2 class="section-title fade-up">常見問題</h2>
+    <p class="section-subtitle fade-up">幫助你做出對自己最適合的決定</p>
+    
+    <div class="faq-container fade-up">
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+          <span class="faq-q-text">我需要有 AI 寫作的經驗嗎？</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            不需要，「AI 拓思」刻意設計成打開 AI 對話框、貼上提詞就能開始的簡單操作。
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+          <span class="faq-q-text">我習慣使用 Gemini 或 ChatGPT，能夠順利操作課程內容嗎？</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            可以，課程裡有為 Gemini、ChatGPT 使用者提供操作說明。
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+          <span class="faq-q-text">「AI 拓思」與市面上傳統寫作、AI 寫作課程有何區別？</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            傳統寫作課程強調如何提升寫作技巧，「AI 拓思」不管那些。<br>
+            本課程只專注教你如何高度使用 AI 進行數位寫作。<br>
+            至於與其他 AI 寫作課程的區別，老實說我不知道。我對其他人如何使用 AI 寫作不感興趣。<br>
+            我知道的，是「AI 拓思」高度強調人機互動。使用它，你沒辦法躺在沙發上、不到半小時輕鬆完成寫作。<br>
+            我知道的，是它能幫助你用 AI 寫出讓自己滿意的長內容。
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+          <span class="faq-q-text"> 課程的交付形式是什麼？</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            完成購買後，你會收到課程 PDF 和內含核心提詞的 Notion 頁面連結。<br>
+          </div>
+        </div>
+      </div>      
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+          <span class="faq-q-text"> 課程有無任何售後支援？</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            沒有。本課程是自學式課程，不提供 email 或其他方式支援。<br>
+            你能夠自行迭代、改動任何從課程中學到的知識，從中產生專屬於你的 AI 寫作流程。
+          </div>
+        </div>
+      </div> 
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+          <span class="faq-q-text">購買本課程後，有退費機制嗎？</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            沒有，本課程無法退費。<br>
+            你能看到這課程頁面，我猜想你是我的電子報讀者。<br>
+            這課程我沒買任何廣告，所以不會吸引那種不認識我、對我零信任的人到這裡。<br><br>
+
+            「AI 拓思」是我實驗許多 AI 寫作流程後，精心設計、濃縮、編制的數位產品。<br>
+            開始 AI 寫作後，我所有的電子報都是用這課程所教的系統，創作出來的文字內容。<br>
+            我完全有信心課程裡的知識與工具，能夠確實履行它承諾的事情。<br><br>
+
+            這套課程並不適合多數人，「AI 拓思」是設計給真正渴望用 AI 寫出好內容的文字創作者、線上事業者。<br>
+            對於熟悉我的創作、重視成果大於課程厚度，願意付出必要時間與心力學習的人，最能獲益。<br><br>
+
+            為了讓你有良好消費體驗，請仔細評估課程是否符合你的需求與操作環境。<br>
+            如果不確定「AI 拓思」是否適合你，購買前請透過電子信箱進行詢問。<br><br>
+
+            <strong>法律聲明：本課程為數位產品，根據《通訊交易解除權合理例外情事適用準則》，一旦販售後即不適用鑑賞期，恕不接受退換貨服務。</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+          <span class="faq-q-text">我有其它問題，可以怎樣聯繫？</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            請 Email 到這裡： <a href="mailto:support@allexxzhang.com" target="_blank">support@allexxzhang.com</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="cta-inner">
+    <div class="cta-eyebrow">AI Imprint Writing · Lite Course</div>
+    <h2 class="cta-title">你下一篇內容，<br>從今天開始。</h2>
+    <p class="cta-subtitle">你的任何零星想法都具有價值，你只差一套單純、務實的 AI 寫作系統，協助你將它們變成自己滿意的文字內容。</p>
+    <a href="https://portaly.cc/allexx/product/sWIkzz4nrXl7Zieb5bQg" class="btn-cta-main">立即購買 AI 拓思 — NT$5,597</a>
+    <p class="cta-note">LITE COURSE · 5 MODULES · 自己的步調，自己的進度</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">AI <span style="color:var(--accent)">拓</span>思</div>
+  <div class="footer-copy">© 2026 ALLEXX ZHANG · ALL RIGHTS RESERVED</div>
+</footer>
+
+<script>
+  function toggleFAQ(button) {
+    const faqItem = button.parentElement;
+    faqItem.classList.toggle('active');
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
